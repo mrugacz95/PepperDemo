@@ -5,10 +5,7 @@ import android.util.Log
 import com.aldebaran.qi.sdk.QiContext
 import com.aldebaran.qi.sdk.QiSDK
 import com.aldebaran.qi.sdk.RobotLifecycleCallbacks
-import com.aldebaran.qi.sdk.builder.ChatBuilder
-import com.aldebaran.qi.sdk.builder.QiChatbotBuilder
-import com.aldebaran.qi.sdk.builder.SayBuilder
-import com.aldebaran.qi.sdk.builder.TopicBuilder
+import com.aldebaran.qi.sdk.builder.*
 import com.aldebaran.qi.sdk.design.activity.RobotActivity
 
 class MainActivity : RobotActivity(), RobotLifecycleCallbacks {
@@ -33,6 +30,13 @@ class MainActivity : RobotActivity(), RobotLifecycleCallbacks {
         val chat = ChatBuilder.with(qiContext)
             .withChatbot(chatBot)
             .build()
+        chat.addOnHeardListener { phrase ->
+            if (phrase.text == "cheers") {
+                val animation = AnimationBuilder.with(qiContext).withResources(R.raw.cheers).build()
+                val animate = AnimateBuilder.with(qiContext).withAnimation(animation).build()
+                animate.async().run()
+            }
+        }
         chat.async().run()
 
     }
